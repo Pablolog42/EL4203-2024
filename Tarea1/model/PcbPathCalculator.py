@@ -1,17 +1,37 @@
-import numpy as np
+import time
+from collections import defaultdict
+
 import scipy.special as sp
 
 from Tarea1.model.Pcb import Pcb
-from functools import cache
-
-from Tarea1.tools import execution_time
+from functools import cache, wraps
 
 
 class PcbPathCalculator:
     def __init__(self):
-        pass
+        # Diccionario de clase para almacenar los tiempos de ejecución
+        self.dict_tiempos_ejec = defaultdict(list)
 
-    @execution_time
+    def execution_time(self, func):
+        """
+        Decorador standard que actua como wrapper e indica el tiempo de ejecución de uan funcion.
+        Args:
+            func: La función a ejecutar
+        """
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            inicio = time.perf_counter()
+            resultado = func(*args, **kwargs)
+            fin = time.perf_counter()
+            tiempo_ejecucion = fin - inicio
+            # Guardar el tiempo de ejecución en el diccionario
+            self.dict_tiempos_ejec[func.__name__].append(tiempo_ejecucion)
+            print(f"La función {func.__name__} tardó {tiempo_ejecucion:.9f} segundos en ejecutarse.")
+            return resultado
+
+        return wrapper
+
     def calculate_paths(self, pcb: Pcb, style: str) -> int:
         """
         Función que retorna el número de paths calculados, de distintas formas
@@ -25,16 +45,20 @@ class PcbPathCalculator:
 
         Raises:
             ValueError: No se ha ingresado un estilo de calculo válido.
+            ValueError: Si existe overflow en el calculo
 
         """
 
         match style:
             case "dinamica":
-                print("Metodo de ejecución: Programacion dinamica")
-                return self.__calculo_dinamico(pcb)
-
+                # print("Metodo de ejecución: Programacion dinamica")
+                try:
+                    return self.__calculo_dinamico(pcb)
+                except RuntimeError:
+                    raise ValueError("El tamaño seleccionado es demasiado grande para ser calculado por programación "
+                                     "dynamic (Overflow)")
             case "combinatoria":
-                print("Metodo de ejecución: Combinatoria")
+                # print("Metodo de ejecución: Combinatoria")
                 return self.__calculo_combinatoria(pcb)
             case _:
                 raise ValueError("No se ha ingresado un estilo de calculo válido.")

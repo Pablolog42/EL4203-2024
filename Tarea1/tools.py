@@ -1,20 +1,23 @@
 import time
+from collections import defaultdict
 from functools import wraps
 
 
+# Diccionario global para almacenar los tiempos de ejecución
+tiempos_ejecucion = defaultdict(list)
+
 def execution_time(func):
     """
-    Decorador que actua como wrapper e indica el tiempo de ejecución de uan funcion.
+    Decorador standard que actua como wrapper e indica el tiempo de ejecución de uan funcion.
     Args:
         func: La función a ejecutar
     """
-
     @wraps(func)
     def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        print(f"Tiempo de ejecución de {func.__name__}: {end_time - start_time} segundos")
-        return result
-
+        inicio = time.perf_counter()
+        resultado = func(*args, **kwargs)
+        fin = time.perf_counter()
+        tiempo_ejecucion = fin - inicio
+        print(f"La función {func.__name__} tardó {tiempo_ejecucion:.9f} segundos en ejecutarse.")
+        return resultado
     return wrapper
