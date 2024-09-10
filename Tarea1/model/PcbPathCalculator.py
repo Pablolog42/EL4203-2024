@@ -69,16 +69,10 @@ class PcbPathCalculator:
     @cache
     def __calculo_dinamico(self, pcb: Pcb) -> int:
         """
-        Calcula en no de paths utilizando programación dinamica
-
-        Args:
-            pcb:
-            style:
-
-        Returns:
+        Calcula en no de paths utilizando programación dinamica (llena una matriz prograsivamente utilizando recursividad)
 
         """
-        # Enfoque de programación dinámica usando NumPy
+        # Enfoque de programación dinámica
         matriz = pcb.matriz
         N = pcb.largo
         M = pcb.ancho
@@ -87,7 +81,7 @@ class PcbPathCalculator:
         matriz[0, :] = 1
         matriz[:, 0] = 1
 
-        # Llenar la tabla dp usando operaciones vectorizadas de NumPy
+        # Llenar la tabla matriz a partir de los items vistos anteriormente (adyacentes)
         for i in range(1, N):
             for j in range(1, M):
                 matriz[i, j] = matriz[i - 1, j] + matriz[i, j - 1]
@@ -97,15 +91,9 @@ class PcbPathCalculator:
     def __calculo_combinatoria(self, pcb: Pcb) -> int:
         """
         Calcula los paths posibles usando combinatoria
-
-        Args:
-            pcb:
-            style:
-
-        Returns:
-
         """
-        # Enfoque combinatorio usando NumPy (ver calculo matematico en README)
+        # Enfoque combinatorio u
         pasos_totales = pcb.largo + pcb.ancho - 2
         # El número de caminos es igual a la combinatoria de (largo+ancho-2) sobre de largo-1
+        # lo anterior se debe a que solamente se puede ir para la derecha una vez iniciado el camino (no hay backtracking)
         return int(sp.comb(pasos_totales, pcb.largo - 1, exact=True))
