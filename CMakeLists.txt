@@ -9,6 +9,10 @@ set(CMAKE_CXX_STANDARD 14)
 #        src/Tarea2/P1.cpp
 #)
 
+#add_executable(EL4203_2024
+#        src/Tarea2/P2.cpp
+#)
+
 add_executable(EL4203_2024
-        src/Tarea2/P2.cpp
+        src/Tarea2/P2-dynamic.cpp
 )
