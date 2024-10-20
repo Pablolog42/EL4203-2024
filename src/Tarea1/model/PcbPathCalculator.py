@@ -3,7 +3,7 @@ from collections import defaultdict
 
 import scipy.special as sp
 
-from Tarea1.model.Pcb import Pcb
+from src.Tarea1.model.Pcb import Pcb
 from functools import cache, wraps
 
 

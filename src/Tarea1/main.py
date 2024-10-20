@@ -1,5 +1,5 @@
-from Tarea1.model.Pcb import Pcb
-from Tarea1.model.PcbPathCalculator import PcbPathCalculator
+from src.Tarea1.model.Pcb import Pcb
+from src.Tarea1.model.PcbPathCalculator import PcbPathCalculator
 
 import matplotlib
 
